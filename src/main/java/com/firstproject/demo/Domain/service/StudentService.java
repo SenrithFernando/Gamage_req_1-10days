@@ -3,8 +3,10 @@ package com.firstproject.demo.Domain.service;
 import com.firstproject.demo.Application.dto.request.CreateStudentDto;
 import com.firstproject.demo.Application.dto.response.StudentGeneralDto;
 import com.firstproject.demo.Domain.entity.Student;
+import com.firstproject.demo.Domain.exception.StudentNotFoundException;
 import com.firstproject.demo.External.repository.StudentRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
     public ResponseEntity<StudentGeneralDto> getStudent(Integer id){
@@ -25,7 +28,7 @@ public class StudentService {
             studentGeneralDto.setGrade(student.getGrade());
             return ResponseEntity.ok(studentGeneralDto);
         }else{
-            return ResponseEntity.notFound().build();
+            throw new StudentNotFoundException("Student not found");
         }
     }
 
@@ -53,12 +56,13 @@ public class StudentService {
     public ResponseEntity<String> updateStudent(Integer id, String newName) {
         Optional<Student> optionalStudent = studentRepository.findById(id);
         if(optionalStudent.isPresent()){
+            log.info("Student found and the id is {}", id);
             Student student = optionalStudent.get();
             student.setName(newName);
             studentRepository.save(student);
             return ResponseEntity.ok("Student updated successfully");
         }else{
-            return ResponseEntity.notFound().build();
+            throw new StudentNotFoundException("Student not found");
         }
     }
 }
