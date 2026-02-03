@@ -16,4 +16,11 @@ public class GlobalExceptionHandler {
         return responseEntity;
     }
 
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<String> handleBookNotFoundException(BookNotFoundException bookNotFoundException){
+        log.error("Book not found exception occurred");
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(bookNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+        return responseEntity;
+    }
+
 }
