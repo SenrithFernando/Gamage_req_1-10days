@@ -1,5 +1,6 @@
 package com.firstproject.demo.Domain.service;
 
+import com.firstproject.demo.Application.dto.request.CreateStudentDto;
 import com.firstproject.demo.Application.dto.response.StudentGeneralDto;
 import com.firstproject.demo.Domain.entity.Student;
 import com.firstproject.demo.External.repository.StudentRepository;
@@ -20,8 +21,42 @@ public class StudentService {
             Student student = optionalStudent.get();
             studentGeneralDto.setId(student.getId());
             studentGeneralDto.setName(student.getName());
+            studentGeneralDto.setEmail(student.getEmail());
             studentGeneralDto.setGrade(student.getGrade());
             return ResponseEntity.ok(studentGeneralDto);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<Student> addStudent(CreateStudentDto createStudentDto) {
+        Student student = new Student();
+        student.setName(createStudentDto.getName());
+        student.setAddress(createStudentDto.getAddress());
+        student.setEmail(createStudentDto.getEmail());
+        student.setGrade(createStudentDto.getGrade());
+        studentRepository.save(student);
+        ResponseEntity<Student> responseEntity = ResponseEntity.ok(student);
+        return responseEntity;
+    }
+
+    public ResponseEntity<String> deleteStudent(Integer id) {
+        Optional<Student> optionalStudent = studentRepository.findById(id);
+        if(optionalStudent.isPresent()){
+            studentRepository.deleteById(id);
+            return ResponseEntity.ok("Student deleted Successfully");
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<String> updateStudent(Integer id, String newName) {
+        Optional<Student> optionalStudent = studentRepository.findById(id);
+        if(optionalStudent.isPresent()){
+            Student student = optionalStudent.get();
+            student.setName(newName);
+            studentRepository.save(student);
+            return ResponseEntity.ok("Student updated successfully");
         }else{
             return ResponseEntity.notFound().build();
         }

@@ -1,6 +1,8 @@
 package com.firstproject.demo.Domain.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -13,13 +15,13 @@ import java.util.Date;
 
 public class Student {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String address;
     private String email;
     private Integer grade;
-    private Date dob;
-    private String password;
+
 
 
 }

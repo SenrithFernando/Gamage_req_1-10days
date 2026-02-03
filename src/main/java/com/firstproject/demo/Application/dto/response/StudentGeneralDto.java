@@ -7,4 +7,7 @@ public class StudentGeneralDto {
     private Integer id;
     private String name;
     private Integer grade;
+    private String email;
+
+
 }
