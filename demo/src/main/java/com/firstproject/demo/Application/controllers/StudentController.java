@@ -12,6 +12,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/student")
+@CrossOrigin(origins = "http://localhost:3000")
 @AllArgsConstructor
 public class StudentController {
 

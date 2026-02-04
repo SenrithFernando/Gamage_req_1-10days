@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/book")
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 @AllArgsConstructor
 public class BookController {
 
@@ -18,6 +19,11 @@ public class BookController {
     @GetMapping("/getBook")
     public ResponseEntity<BookGeneralDto> getBook(@RequestParam Integer id){
         return bookService.getBook(id);
+    }
+
+    @GetMapping("/getAllBook")
+    public ResponseEntity<java.util.List<BookGeneralDto>> getAllBook(){
+        return bookService.getAllBook();
     }
 
     @PostMapping("/addBook")

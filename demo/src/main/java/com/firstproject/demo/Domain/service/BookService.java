@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +35,21 @@ public class BookService {
         }else{
             throw new BookNotFoundException("Book not found");
         }
+    }
+
+    public ResponseEntity<List<BookGeneralDto>> getAllBook() {
+        List<Book> books = bookRepository.findAll();
+        List<BookGeneralDto> bookGeneralDtos = books.stream().map(book -> {
+            BookGeneralDto bookGeneralDto = new BookGeneralDto();
+            bookGeneralDto.setId(book.getId());
+            bookGeneralDto.setTitle(book.getTitle());
+            bookGeneralDto.setAuthor(book.getAuthor());
+            bookGeneralDto.setIsbn(book.getIsbn());
+            bookGeneralDto.setCategory(book.getCategory());
+            bookGeneralDto.setPublishedYear(book.getPublishedYear());
+            return bookGeneralDto;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(bookGeneralDtos);
     }
 
     public ResponseEntity<Book> addBook(CreateBookDto createBookDto) {
