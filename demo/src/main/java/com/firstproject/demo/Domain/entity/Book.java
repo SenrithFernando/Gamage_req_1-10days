@@ -22,4 +22,5 @@ public class Book {
     private String isbn;
     private String category;
     private Integer publishedYear;
+    private String coverUrl;
 }

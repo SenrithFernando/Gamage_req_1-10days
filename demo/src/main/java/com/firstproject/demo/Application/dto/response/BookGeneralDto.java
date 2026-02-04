@@ -10,4 +10,5 @@ public class BookGeneralDto {
     private String isbn;
     private String category;
     private Integer publishedYear;
+    private String coverUrl;
 }

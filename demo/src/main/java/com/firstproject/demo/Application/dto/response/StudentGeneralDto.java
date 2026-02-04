@@ -1,6 +1,7 @@
 package com.firstproject.demo.Application.dto.response;
 
 import lombok.Data;
+import com.firstproject.demo.Domain.entity.Role;
 
 @Data
 public class StudentGeneralDto {
@@ -8,6 +9,7 @@ public class StudentGeneralDto {
     private String name;
     private Integer grade;
     private String email;
+    private Role role;
 
 
 }

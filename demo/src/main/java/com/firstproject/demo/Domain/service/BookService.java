@@ -31,6 +31,7 @@ public class BookService {
             bookGeneralDto.setIsbn(book.getIsbn());
             bookGeneralDto.setCategory(book.getCategory());
             bookGeneralDto.setPublishedYear(book.getPublishedYear());
+            bookGeneralDto.setCoverUrl(book.getCoverUrl());
             return ResponseEntity.ok(bookGeneralDto);
         }else{
             throw new BookNotFoundException("Book not found");
@@ -47,6 +48,7 @@ public class BookService {
             bookGeneralDto.setIsbn(book.getIsbn());
             bookGeneralDto.setCategory(book.getCategory());
             bookGeneralDto.setPublishedYear(book.getPublishedYear());
+            bookGeneralDto.setCoverUrl(book.getCoverUrl());
             return bookGeneralDto;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(bookGeneralDtos);
@@ -59,6 +61,7 @@ public class BookService {
         book.setIsbn(createBookDto.getIsbn());
         book.setCategory(createBookDto.getCategory());
         book.setPublishedYear(createBookDto.getPublishedYear());
+        book.setCoverUrl(createBookDto.getCoverUrl());
         bookRepository.save(book);
         ResponseEntity<Book> responseEntity = ResponseEntity.ok(book);
         return responseEntity;
@@ -74,12 +77,17 @@ public class BookService {
         }
     }
 
-    public ResponseEntity<String> updateBook(Integer id, String newTitle) {
+    public ResponseEntity<String> updateBook(Integer id, CreateBookDto updateDto) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if(optionalBook.isPresent()){
             log.info("Book found and the id is {}", id);
             Book book = optionalBook.get();
-            book.setTitle(newTitle);
+            book.setTitle(updateDto.getTitle());
+            book.setAuthor(updateDto.getAuthor());
+            book.setIsbn(updateDto.getIsbn());
+            book.setCategory(updateDto.getCategory());
+            book.setPublishedYear(updateDto.getPublishedYear());
+            book.setCoverUrl(updateDto.getCoverUrl());
             bookRepository.save(book);
             return ResponseEntity.ok("Book updated successfully");
         }else{

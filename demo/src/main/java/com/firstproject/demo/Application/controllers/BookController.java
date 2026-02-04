@@ -37,7 +37,7 @@ public class BookController {
     }
 
     @PutMapping("/updateBook")
-    public ResponseEntity<String> updateBook(@RequestParam Integer id, @RequestParam String newTitle){
-        return bookService.updateBook(id,newTitle);
+    public ResponseEntity<String> updateBook(@RequestParam Integer id, @RequestBody CreateBookDto updateDto){
+        return bookService.updateBook(id, updateDto);
     }
 }

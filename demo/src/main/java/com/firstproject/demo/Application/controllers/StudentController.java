@@ -12,7 +12,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/student")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 @AllArgsConstructor
 public class StudentController {
 
@@ -23,8 +23,13 @@ public class StudentController {
         return studentService.getStudent(id);
     }
 
+    @GetMapping("/getAllStudent")
+    public ResponseEntity<java.util.List<StudentGeneralDto>> getAllStudent(){
+        return studentService.getAllStudent();
+    }
+
     @PostMapping("/addStudent")
-    public ResponseEntity<Student> addStdent(@RequestBody CreateStudentDto createStudentDto){
+    public ResponseEntity<Student> addStudent(@RequestBody CreateStudentDto createStudentDto){
         return studentService.addStudent(createStudentDto);
     }
 
@@ -34,7 +39,7 @@ public class StudentController {
     }
 
     @PutMapping("/updateStudent")
-    public ResponseEntity<String> updateStudent(@RequestParam Integer id, @RequestParam String newName){
-        return studentService.updateStudent(id,newName);
+    public ResponseEntity<String> updateStudent(@RequestParam Integer id, @RequestBody CreateStudentDto updateDto){
+        return studentService.updateStudent(id, updateDto);
     }
 }
