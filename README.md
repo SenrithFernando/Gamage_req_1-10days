@@ -6,7 +6,7 @@ A small demo application that manages students/members and books.
 
 - Backend: Spring Boot (Java, Maven)
 - Frontend: Next.js + React + TypeScript (located in `library_ui`)
-- Database: H2 / in-memory (default for quick demo)
+- Database: My SQL
 
 ---
 
