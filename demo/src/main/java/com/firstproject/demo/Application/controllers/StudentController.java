@@ -1,6 +1,7 @@
 package com.firstproject.demo.Application.controllers;
 
 import com.firstproject.demo.Application.dto.request.CreateStudentDto;
+import com.firstproject.demo.Application.dto.request.LoginRequestDto;
 import com.firstproject.demo.Application.dto.response.StudentGeneralDto;
 import com.firstproject.demo.Domain.entity.Student;
 import com.firstproject.demo.Domain.service.StudentService;
@@ -39,7 +40,12 @@ public class StudentController {
     }
 
     @PutMapping("/updateStudent")
-    public ResponseEntity<String> updateStudent(@RequestParam Integer id, @RequestBody CreateStudentDto updateDto){
+    public ResponseEntity<String> updateStudent(@RequestParam Integer id, @RequestBody CreateStudentDto updateDto) {
         return studentService.updateStudent(id, updateDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest) {
+        return studentService.login(loginRequest);
     }
 }

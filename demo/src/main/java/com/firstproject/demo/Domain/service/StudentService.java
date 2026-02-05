@@ -1,16 +1,22 @@
 package com.firstproject.demo.Domain.service;
 
 import com.firstproject.demo.Application.dto.request.CreateStudentDto;
+import com.firstproject.demo.Application.dto.request.LoginRequestDto;
 import com.firstproject.demo.Application.dto.response.StudentGeneralDto;
 import com.firstproject.demo.Domain.entity.Student;
-import com.firstproject.demo.Domain.exception.StudentNotFoundException;
 import com.firstproject.demo.External.repository.StudentRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
+import com.firstproject.demo.Domain.exception.StudentNotFoundException;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +32,7 @@ public class StudentService {
             studentGeneralDto.setName(student.getName());
             studentGeneralDto.setEmail(student.getEmail());
             studentGeneralDto.setGrade(student.getGrade());
+            studentGeneralDto.setAddress(student.getAddress());
             studentGeneralDto.setRole(student.getRole());
             return ResponseEntity.ok(studentGeneralDto);
         }else{
@@ -63,6 +70,7 @@ public class StudentService {
             dto.setId(student.getId());
             dto.setName(student.getName());
             dto.setEmail(student.getEmail());
+            dto.setAddress(student.getAddress());
             dto.setGrade(student.getGrade());
             dto.setRole(student.getRole());
             return dto;
@@ -79,12 +87,35 @@ public class StudentService {
             student.setAddress(updateDto.getAddress());
             student.setEmail(updateDto.getEmail());
             student.setGrade(updateDto.getGrade());
-            student.setPassword(updateDto.getPassword());
+            if(updateDto.getPassword() != null && !updateDto.getPassword().isBlank()){
+                student.setPassword(updateDto.getPassword());
+            }
             student.setRole(updateDto.getRole());
             studentRepository.save(student);
             return ResponseEntity.ok("Student updated successfully");
         }else{
             throw new StudentNotFoundException("Student not found");
         }
+    }
+
+    public ResponseEntity<?> login(LoginRequestDto loginRequest) {
+        Optional<Student> studentOpt = studentRepository.findByEmail(loginRequest.getEmail());
+        
+        if (studentOpt.isPresent()) {
+            Student student = studentOpt.get();
+            // Simple string comparison for password (in production use BCrypt)
+            if (student.getPassword().equals(loginRequest.getPassword())) {
+                StudentGeneralDto dto = new StudentGeneralDto();
+                dto.setId(student.getId());
+                dto.setName(student.getName());
+                dto.setEmail(student.getEmail());
+                dto.setAddress(student.getAddress());
+                dto.setGrade(student.getGrade());
+                dto.setRole(student.getRole());
+                return ResponseEntity.ok(dto);
+            }
+        }
+        
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
 }
